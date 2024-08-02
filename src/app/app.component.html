@@ -1,6 +1,6 @@
 
-<div class=" h-screen w-screen bg-neutral-800 text-white flex flex-col items-center justify-center">
-  <app-form></app-form>
+<div class=" bg-neutral-800 text-white flex flex-col  gap-10 p-10 min-h-screen">
+  <app-form (onAdd) = "addData($event)" ></app-form>
   <app-table></app-table>
 </div>
 

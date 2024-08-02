@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { FormComponent } from './components/form/form.component';
+import { FormComponent, IformValues } from './components/form/form.component';
 import { TableComponent } from './components/table/table.component';
 
 @Component({
@@ -11,5 +11,9 @@ import { TableComponent } from './components/table/table.component';
   styleUrl: './app.component.css'
 })
 export class AppComponent {
+  @Output() onAdd:EventEmitter<IformValues[]> = new EventEmitter()
+  addData(data: IformValues[]) {
+  //  this.onAdd.emit(data);
+  }
   title = 'my-app';
 }
