@@ -8,7 +8,7 @@
       <mat-label>User Name</mat-label>
       <input
         matInput
-        (blur)="updateErrorMessage()"
+
         placeholder="Smith"
         formControlName="userName"
         required
@@ -20,12 +20,11 @@
       <mat-form-field>
         <mat-label>Select me</mat-label>
         <mat-select required formControlName="workoutType">
-          <!-- <div ngFor="opton of options"> -->
 
           <mat-option value="Cycling">Cycling</mat-option>
           <mat-option value="Running">Running</mat-option>
           <mat-option value="Yoga">Yoga</mat-option>
-          <!-- </div> -->
+ 
         </mat-select>
       </mat-form-field>
 
@@ -42,6 +41,7 @@
     </div>
 
     <button
+      (click)="onClick"
       class="w-fit !text-blue-900 !rounded-full"
       type="submit"
       mat-stroked-button

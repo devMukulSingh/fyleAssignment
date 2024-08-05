@@ -1,48 +1,60 @@
-import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
-import { MatTable, MatTableModule } from '@angular/material/table';
+import { AfterViewInit, ChangeDetectorRef, Component, Input, Output, ViewChild } from '@angular/core';
+import { MatTable, MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { IformValues } from '../form/form.component';
-import { DataService } from '../../data.service';
-import { Observable, ReplaySubject, Subscription } from 'rxjs';
+import { Observable, of, ReplaySubject, Subscription } from 'rxjs';
 import { DataSource } from '@angular/cdk/collections';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatSort, MatSortModule } from '@angular/material/sort';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { StoreService } from '../../services/store.service';
 
 @Component({
   selector: 'app-table',
   standalone: true,
-  imports: [MatTableModule],
+  imports: [MatFormFieldModule, MatInputModule, MatTableModule, MatSortModule, MatPaginatorModule],
   templateUrl: './table.component.html',
   styleUrl: './table.component.css'
 })
+
 export class TableComponent {
-  
-  initialData = typeof window!=="undefined" ? JSON.parse(window.localStorage.getItem('tableData') || "{}") : []
-  subscription: Subscription;
-  dataSource = new ExampleDataSource(this.initialData || []);
-
-  constructor(private dataService: DataService,) {
-    this.subscription = this.dataService.data$.subscribe(data => {
-      window.localStorage.setItem('tableData',JSON.stringify([...data,...this.initialData]))
-      this.dataSource.setData([...this.initialData,...data]);
-    });
-  }
+  @Input() tableData:IformValues[] = [];
   displayedColumns: string[] = ['userName', 'workoutType', 'workoutMinutes'];
+  initialData: IformValues[] = typeof window !== "undefined" ? JSON.parse(window.localStorage.getItem('tableData') || "[]") : [];
+
+  @ViewChild(MatTable) table!: MatTable<IformValues>;
+  @ViewChild(MatPaginator) paginator !: MatPaginator;
+  
+  dataSource: MatTableDataSource<IformValues> = new MatTableDataSource(this.initialData);
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+  }
+  constructor(private dataService: StoreService) {
+    this.dataService.tableData.subscribe( (data) => {
+      this.dataSource.data.push(data)
+      this.dataSource = new MatTableDataSource(this.dataSource.data)
+    })
+    // this.dataSource.paginator = this.paginator;
+  }
   
 }
 
-class ExampleDataSource extends DataSource<IformValues> {
-  private _dataStream = new ReplaySubject<IformValues[]>();
 
-  constructor(initialData: IformValues[]) {
-    super();
-    this.setData(initialData);
-  }
+// class ExampleDataSource extends DataSource<IformValues> {
+//   private _dataStream = new ReplaySubject<IformValues[]>();
 
-  connect(): Observable<IformValues[]> {
-    return this._dataStream;
-  }
+//   constructor( dataService: StoreService) {
+//     super();
+//     this.setData(dataService.dataSource.data);
+//   }
 
-  disconnect() { }
+//   connect(): Observable<IformValues[]> {
+//     return this._dataStream;
+//   }
 
-  setData(data: IformValues[]) {
-    this._dataStream.next(data);
-  }
-}
+//   disconnect() { }
+
+//   setData(data: IformValues[]) {
+//     this._dataStream.next(data);
+//   }
+// }

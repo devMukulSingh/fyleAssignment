@@ -11,9 +11,13 @@ import { TableComponent } from './components/table/table.component';
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  @Output() onAdd:EventEmitter<IformValues[]> = new EventEmitter()
-  addData(data: IformValues[]) {
-  //  this.onAdd.emit(data);
-  }
+  tableData : IformValues[] = []
+  @Output() onAdd:EventEmitter<IformValues[]> = new EventEmitter();
+  @Output() onDataAdd: EventEmitter<IformValues[]> = new EventEmitter();
+
+constructor(){
+  
+}
+
   title = 'my-app';
 }

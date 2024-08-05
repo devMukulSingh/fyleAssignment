@@ -1,7 +1,7 @@
 
 <div class=" bg-neutral-800 text-white flex flex-col  gap-10 p-10 min-h-screen">
-  <app-form (onAdd) = "addData($event)" ></app-form>
-  <app-table></app-table>
+  <app-form (onClick)="onAdd" ></app-form>
+  <app-table (onAdd)="onDataAdd"></app-table>
 </div>
 
 
